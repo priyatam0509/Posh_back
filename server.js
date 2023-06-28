@@ -32,21 +32,13 @@ var maillist = [
 
 maillist.toString();
 app.post("/api/sendemail", async (req, res) => {
-  const { email,amount,subscription,renewStartDate,renewEndDate,userName } = req.body;
-  console.log('req.body: ', req.body);
-  
 
   try {
-    const send_to = email;
+    const send_to = req.body.to;
     const sent_from = process.env.EMAIL_USER;
-    const reply_to = email;
-    const subject = "Registration In POSH HEALTH CLUB";
-    const message = `
-        <h3>Hello ${userName}</h3>
-        <p>You have sucessfully renew your subscription of ${subscription}</p>
-        <p>Your have paid Rs.${amount}</p>
-        <p>Your subscription expiry date is ${renewEndDate}</p>
-    `;
+    const reply_to = req.body.to;
+    const subject = req.body.subject;
+    const message = req.body.mailBody;
     
 
     await sendEmail(subject, message, send_to, sent_from, reply_to);
