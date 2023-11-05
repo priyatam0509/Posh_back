@@ -48,6 +48,13 @@ function generateCustomerInformation(doc, invoice) {
 	console.log("invoice=====",invoice)
 	const shipping = invoice.data.address;
 	const userName = invoice.data.firstname + invoice.data.lastname;
+	const newDateChange = formatDate(invoice.todayNewDate);
+	const newExpiryDateChange = formatDate(invoice.expiryDate);
+	const newSubDateChange = formatDate(invoice.subsStartDate);
+	console.log("data is here for new date====",newDateChange);
+	console.log("data is here for new date111111====",newExpiryDateChange);
+	console.log("data is here for new date222222====",newSubDateChange);
+
 
 	doc
 	  .fillColor("#444444")
