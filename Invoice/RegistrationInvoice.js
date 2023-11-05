@@ -1,5 +1,8 @@
 
 const PDFDocument = require('pdfkit');
+// import dateFormat from "dateformat";
+
+var dateFormat = require('dateformat');
 
 const Registrationinvoice=(formData)=>{
     let pdfDoc = new PDFDocument();
@@ -45,15 +48,16 @@ function formatDate(date) {
 
 
 function generateCustomerInformation(doc, invoice) {
-	console.log("invoice=====",invoice)
+	// console.log("invoice=====",invoice)
 	const shipping = invoice.data.address;
 	const userName = invoice.data.firstname + invoice.data.lastname;
-	const newDateChange = formatDate(invoice.todayNewDate);
-	const newExpiryDateChange = formatDate(invoice.expiryDate);
-	const newSubDateChange = formatDate(invoice.subsStartDate);
-	console.log("data is here for new date====",newDateChange);
-	console.log("data is here for new date111111====",newExpiryDateChange);
-	console.log("data is here for new date222222====",newSubDateChange);
+	const newDateChange =   dateFormat(invoice.todayNewDate, "dd/mm/yyyy");
+	const newSubDateChange = dateFormat(invoice.subsStartDate, "dd/mm/yyyy"); 
+
+
+	// console.log("data is here for new date====",newDateChange);
+	// console.log("data is here for new date111111====",newExpiryDateChange);
+	// console.log("data is here for new date====",newSubDateChange);
 
 
 	doc
@@ -72,9 +76,9 @@ function generateCustomerInformation(doc, invoice) {
 	  .text(userName, 150, customerInformationTop)
 	  .font("Helvetica")
 	  .text("Invoice Date:", 50, customerInformationTop + 15)
-	  .text(invoice.todayNewDate, 150, customerInformationTop + 15)
+	  .text(newDateChange, 150, customerInformationTop + 15)
 	  .text("Start Date:", 50, customerInformationTop + 30)
-	  .text(invoice.subsStartDate,150,customerInformationTop + 30)
+	  .text(newSubDateChange,150,customerInformationTop + 30)
 	  .text("Payment Mode:", 50, customerInformationTop + 45)
 	  .text(invoice.data.payment,150,customerInformationTop + 45)
   
@@ -92,9 +96,10 @@ function generateCustomerInformation(doc, invoice) {
 	generateHr(doc, 270);
   }
 function generateInvoiceTable(doc, invoice) {
+	console.log("dsgfsracfgdfdh====",invoice);
 	let i;
 	const invoiceTableTop = 330;
-  
+	const newExpiryDateChange = dateFormat(invoice.newExpiryDate, "dd/mm/yyyy");
 	doc.font("Helvetica-Bold");
 	generateTableRow(
 	  doc,
@@ -111,8 +116,8 @@ function generateInvoiceTable(doc, invoice) {
 	for (i = 0; i < invoice.data.length; i++) {
 		console.log('invoice.data: ', invoice.data[i]);
 	const position = invoiceTableTop + (i + 1) * 30;
-	const expiryDate = formatDate(new Date(invoice.data[i].expiryDate));
-
+	const expiryDate = dateFormat(invoice.data[i].expiryDate, "dd/mm/yyyy"); 
+	console.log("date is heree===",expiryDate);
 
 	  generateTableRow(
 		    doc,
@@ -133,7 +138,7 @@ function generateInvoiceTable(doc, invoice) {
 		doc,
 		subtotalPosition,
 		invoice.data.subscription,
-		invoice.newExpiryDate,
+		newExpiryDateChange,
 		formatCurrency(invoice.data.amount),
 		"0",
 		"0",
